@@ -10,4 +10,5 @@ urlpatterns = [
     ),
     path("products/", name="product_operations", view=ProductOperations.as_view()),
     path("auth/", name="authentication", view=Auth.as_view()),
+    path("order/", name="order_operations", view=OrderOperations.as_view()),
 ]

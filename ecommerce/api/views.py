@@ -1,4 +1,7 @@
+import datetime
 from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.settings import api_settings
 from rest_framework.response import Response
@@ -9,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, OrderSerializer
 
 
 # Endpoints section connected to authentication
@@ -142,3 +145,83 @@ class ProductOperations(APIView):
         instance.delete()
 
         return Response({"message": "Product was deleted."}, status=status.HTTP_200_OK)
+
+
+# Endpoints section connected to workflow with orders
+class OrderOperations(APIView):
+    queryset = Product.objects.all()
+    serializer = OrderSerializer
+
+    def post(self, request):
+        serializer = self.serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            products = serializer.validated_data.get("products")["data"]
+
+            if len(products) == 0:
+                return Response(
+                    {
+                        "message": "You have to provide products list with id and amount to create order."
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            user_query = (
+                User.objects.all()
+                .filter(
+                    first_name=serializer.validated_data["name"],
+                    last_name=serializer.validated_data["surname"],
+                )
+                .first()
+            )
+            if not user_query:
+                return Response(
+                    {"message": "User with this name and surname doesn't exist."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            summary_price = 0
+            for product in products:
+                product_id = product["id"]
+                product_amount = product["amount"]
+                db_product = self.queryset.filter(id=product_id).first()
+                if not db_product:
+                    return Response(
+                        {
+                            "message": f"Product with id: {product_id}, doesn't exist in database."
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                summary_price += product_amount * db_product.price
+
+            today = datetime.datetime.today()
+            payment_date = today + datetime.timedelta(days=5)
+            today = datetime.datetime.today().strftime("%Y-%m-%d")
+            payment_date = payment_date.strftime("%Y-%m-%d")
+            resp = {
+                "message": "New order was created.",
+                "summary_price": summary_price,
+                "payment_date": payment_date,
+            }
+
+            serializer.create(
+                validated_data=serializer.validated_data,
+                summary=products,
+                today=today,
+                payment_date=payment_date,
+                price=summary_price,
+                client_id=user_query,
+            )
+
+            send_mail(
+                "Order Confirmation",
+                "Thank you for your order!",
+                "example@example.com",
+                ["client@client.com"],
+            )
+
+            return Response(resp, status=status.HTTP_200_OK)
+
+        return Response(
+            {"message": "An error occured while creating new order"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )

@@ -1,16 +1,7 @@
 from rest_framework import serializers
-from .models import ProductCategory, Product
+from .models import ProductCategory, Product, Order, Address
 from PIL import Image
-import os
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductCategory
-        fields = "__all__"
-
-    def create(self, validated_data):
-        return super().create(validated_data)
+import os, datetime
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -60,3 +51,28 @@ class ProductSerializer(serializers.ModelSerializer):
                 print(f"Cannot create thumbnail: {e}")
 
         return super().update(instance, validated_data)
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = "__all__"
+
+
+class OrderSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    surname = serializers.CharField()
+    address = AddressSerializer()
+    products = serializers.JSONField()
+
+    def create(self, validated_data, summary, today, payment_date, price, client_id):
+        address = validated_data.get("address")
+        address_id, _ = Address.objects.get_or_create(**address)
+        new_order = Order.objects.create(
+            client=client_id,
+            delivery_address=address_id,
+            ordered_products_summary=summary,
+            order_date=today,
+            payment_date=payment_date,
+            price=price,
+        )
