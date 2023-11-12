@@ -9,4 +9,5 @@ urlpatterns = [
         view=GetSpecificProduct.as_view(),
     ),
     path("products/", name="product_operations", view=ProductOperations.as_view()),
+    path("auth/", name="authentication", view=Auth.as_view()),
 ]

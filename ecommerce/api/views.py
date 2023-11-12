@@ -1,12 +1,23 @@
 from django.shortcuts import render
 from rest_framework import status
+from rest_framework.settings import api_settings
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from .models import Product
 from .serializers import ProductSerializer
+
+
+# Endpoints section connected to authentication
+class Auth(ObtainAuthToken):
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+    def post(self, request):
+        pass
 
 
 # Endpoints section connected to workflow with products
@@ -43,7 +54,8 @@ class ProductOperations(APIView):
                 if params_filter == "name":
                     self.queryset = self.queryset.filter(name=params_filter_value)
                 elif params_filter == "category":
-                    self.queryset = self.queryset.filter(category=params_filter_value)
+                    filter_kwargs = {f"{params_filter}__category": params_filter_value}
+                    self.queryset = self.queryset.filter(**filter_kwargs)
                 elif params_filter == "description":
                     self.queryset = self.queryset.filter(
                         description=params_filter_value
@@ -75,6 +87,7 @@ class ProductOperations(APIView):
     def post(self, request):
         serializer = self.serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
+            serializer.save()
             return Response(
                 {"message": "New product was created."}, status=status.HTTP_201_CREATED
             )
