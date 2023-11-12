@@ -1,5 +1,4 @@
 import datetime
-from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from rest_framework import status
@@ -11,7 +10,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-from .models import Product
+from .models import Product, Order
 from .serializers import ProductSerializer, OrderSerializer
 
 
@@ -225,3 +224,67 @@ class OrderOperations(APIView):
             {"message": "An error occured while creating new order"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
+
+
+# Endpoints section connected to workflow with statistics for seller
+class Statistics(APIView):
+    queryset = Order.objects.all()
+
+    def get(self, request):
+        params = request.query_params
+        from_date = params.get("from")
+        to_date = params.get("to")
+        amount = params.get("max_items")
+
+        if not from_date:
+            return Response(
+                {
+                    "message: In order to get statistics you have to provide ,,from'' parameter."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not to_date:
+            return Response(
+                {
+                    "message: In order to get statistics you have to provide ,,to'' parameter."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            date_format = "%Y-%m-%d"
+            from_date = datetime.datetime.strptime(from_date, date_format)
+            to_date = datetime.datetime.strptime(to_date, date_format)
+            amount = int(amount)
+            if amount <= 0:
+                raise ValueError
+        except ValueError:
+            return Response(
+                {
+                    "message: In order to get statistics you have to provide dates in format YYYY-MM-DD and parameter amount greater than 0 as integer."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        self.queryset = self.queryset.filter(order_date__range=[from_date, to_date])
+        if len(self.queryset) == 0:
+            return Response(
+                {"message": "Orders in this range of time don't exist."},
+                status=status.HTTP_200_OK,
+            )
+
+        products = {}
+        products_query = Product.objects.all()
+        for query in self.queryset.values():
+            summary = query.get("ordered_products_summary")
+            for item in summary:
+                item_name = products_query.filter(id=item["id"]).first().name
+                if item_name not in products.keys():
+                    products[item_name] = item["amount"]
+                else:
+                    products[item_name] += item["amount"]
+
+        products = sorted(products.items(), key=lambda x: x[1], reverse=True)
+        if amount > len(products):
+            return Response({"data": products}, status=status.HTTP_200_OK)
+        else:
+            return Response({"data": products[:amount]}, status=status.HTTP_200_OK)
