@@ -1,0 +1,41 @@
+----- Food -----
+
+1. **Product: Organic Premium Raspberries**
+   - **Price:** $29.99 per pack (500g)
+   - **Description:** Our organic premium raspberries are an excellent choice for fruit enthusiasts. Harvested from high-quality plantations, they are juicy, sweet, and packed with vitamins. Perfect for snacking, adding to desserts, or fresh juice.
+
+2. **Product: Arabica Grand Reserve Coffee**
+   - **Price:** $39.99 per pack (250g)
+   - **Description:** Arabica Grand Reserve Coffee is an exceptional blend of the highest quality Arabica beans, providing an intense flavor and aroma. Ideal for coffee connoisseurs seeking a unique taste experience.
+
+3. **Product: Healthy Lunchbox Fit Set**
+   - **Price:** $19.99
+   - **Description:** The Healthy Lunchbox Fit Set is curated for those who prioritize nutritious meals on the go. Packed with wholesome snacks and balanced choices, it's the perfect solution for maintaining a healthy and active lifestyle.
+
+----- Cars -----
+
+4. **Product: Electric SUV EkoDrive X200**
+   - **Price:** $149,999
+   - **Description:** The EkoDrive X200 is an innovative, fully electric SUV that combines performance with eco-friendliness. With a range of over 400 km on a single charge, rapid acceleration, and luxurious interior, it not only makes your travel environmentally friendly but also comfortable and exhilarating.
+
+5. **Product: Hybrid City Car EcoCommute 300**
+   - **Price:** $34,999
+   - **Description:** The EcoCommute 300 is a hybrid city car designed for efficiency and sustainability. With its compact design, fuel efficiency, and advanced hybrid technology, it's the perfect choice for urban commuters who care about the environment.
+
+6. **Product: Luxury Sedan EliteDrive S500**
+   - **Price:** $79,999
+   - **Description:** The EliteDrive S500 is a luxury sedan that seamlessly combines style, performance, and cutting-edge technology. With a powerful engine, advanced safety features, and a sleek design, it offers a sophisticated driving experience.
+
+----- Sports -----
+
+7. **Product: Professional Tennis Racket SwiftStrike 5000**
+   - **Price:** $899
+   - **Description:** The SwiftStrike 5000 is a tennis racket designed for professionals and tennis enthusiasts. Crafted from high-quality materials, it provides precision, power, and control with every stroke. Featuring innovative technologies, this racket elevates your game on the court to new, previously unreachable heights.
+
+8. **Product: High-Performance Running Shoes BlazeX Pro**
+   - **Price:** $129.99
+   - **Description:** The BlazeX Pro running shoes are engineered for high performance. With advanced cushioning, lightweight design, and superior traction, they provide the support and comfort you need to achieve your running goals.
+
+9. **Product: Fitness Tracker TechFit 9000**
+   - **Price:** $149.99
+   - **Description:** The TechFit 9000 is a state-of-the-art fitness tracker designed to monitor and optimize your workouts. With features such as heart rate monitoring, GPS tracking, and a sleek design, it's your perfect companion for achieving fitness milestones.
