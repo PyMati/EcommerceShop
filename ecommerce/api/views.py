@@ -75,6 +75,8 @@ class ProductOperations(APIView):
             or self.request.method == "DELETE"
         ):
             return [IsAuthenticated(), Seller()]
+        else:
+            return []
 
     def get(self, request, *args, **kwargs):
         params = request.query_params

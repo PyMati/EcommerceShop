@@ -95,6 +95,37 @@
 			"response": []
 		},
 		{
+			"name": "Send reminder",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token b08c6e1d06734315392f649974644f42e782cdbb",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:3005/api/v1/reminder/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"reminder",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Update product",
 			"request": {
 				"method": "PUT",
@@ -174,13 +205,47 @@
 			"response": []
 		},
 		{
-			"name": "Get auth token",
+			"name": "Get auth token as seller",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"test2test2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3005/api/v1/auth/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get auth token as customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"testcustomer\",\r\n    \"password\": \"customer123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
