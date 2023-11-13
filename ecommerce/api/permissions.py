@@ -2,8 +2,10 @@ from rest_framework import permissions
 
 
 class Client(permissions.BasePermission):
-    pass
+    def has_permission(self, request, view):
+        return request.user.is_client
 
 
 class Seller(permissions.BasePermission):
-    pass
+    def has_permission(self, request, view):
+        return request.user.is_seller

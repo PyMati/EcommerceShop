@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "adc09fc7-e018-456d-abc1-af24c3750e99",
+		"name": "Ecommerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24662463",
+		"_collection_link": "https://crimson-sunset-329565.postman.co/workspace/Team-Workspace~957c8f30-a886-433e-8f7f-7a33ebd67294/collection/24662463-adc09fc7-e018-456d-abc1-af24c3750e99?action=share&source=collection_link&creator=24662463"
+	},
+	"item": [
+		{
+			"name": "Get product list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3005/api/v1/products/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "filter_by",
+							"value": "category",
+							"disabled": true
+						},
+						{
+							"key": "filter_value",
+							"value": "Cars",
+							"disabled": true
+						},
+						{
+							"key": "sort_by",
+							"value": "name",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get statistics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token acee32c9574eab553697cd126daf68ad791043ef",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:3005/api/v1/statistics/?from=2022-05-15&to=2023-11-12&max_items=3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"statistics",
+						""
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "2022-05-15"
+						},
+						{
+							"key": "to",
+							"value": "2023-11-12"
+						},
+						{
+							"key": "max_items",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Młody/Desktop/zr2.png"
+						},
+						{
+							"key": "id",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "category",
+							"value": "Cars",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3005/api/v1/products/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3005/api/v1/products/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get auth token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"test2\",\r\n    \"password\": \"test2test2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3005/api/v1/auth/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Skuter",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Najlepszy skuter",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "1000",
+							"type": "text"
+						},
+						{
+							"key": "category",
+							"value": "Cars",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Młody/Desktop/zr1.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3005/api/v1/products/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token acee32c9574eab553697cd126daf68ad791043ef",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Janusz\",\r\n    \"surname\": \"Kowalski\",\r\n    \"address\": {\r\n        \"city\": \"Lodz\",\r\n        \"postcode\": \"00-000\",\r\n        \"street\": \"Wroblewskiego\",\r\n        \"building_number\": 12,\r\n        \"apartament_number\": 1\r\n    },\r\n    \"products\": {\r\n        \"data\": [\r\n            {\r\n                \"id\": 1,\r\n                \"amount\": 2\r\n            },\r\n            {\r\n                \"id\": 3,\r\n                \"amount\": 4\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3005/api/v1/order/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

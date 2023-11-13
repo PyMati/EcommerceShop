@@ -76,3 +76,8 @@ class OrderSerializer(serializers.Serializer):
             payment_date=payment_date,
             price=price,
         )
+
+
+class UserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()

@@ -1,25 +1,48 @@
 import datetime
+from rest_framework.renderers import api_settings
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.settings import api_settings
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.views import ObtainAuthToken, Token
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from .models import Product, Order
-from .serializers import ProductSerializer, OrderSerializer
+from .serializers import ProductSerializer, OrderSerializer, UserSerializer
+from .permissions import Seller, Client
 
 
 # Endpoints section connected to authentication
 class Auth(ObtainAuthToken):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
     def post(self, request):
-        pass
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = self.queryset.filter(
+            username=serializer.validated_data["username"]
+        ).first()
+        if not user:
+            return Response(
+                {"message": "Invalid password."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        if not user.check_password(serializer.validated_data["password"]):
+            return Response(
+                {"message": "User provided bad password."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({"login_token": token.key}, status=status.HTTP_200_OK)
 
 
 # Endpoints section connected to workflow with products
@@ -150,6 +173,7 @@ class ProductOperations(APIView):
 class OrderOperations(APIView):
     queryset = Product.objects.all()
     serializer = OrderSerializer
+    permission_classes = [IsAuthenticated, Client]
 
     def post(self, request):
         serializer = self.serializer(data=request.data)
@@ -229,6 +253,7 @@ class OrderOperations(APIView):
 # Endpoints section connected to workflow with statistics for seller
 class Statistics(APIView):
     queryset = Order.objects.all()
+    permission_classes = [IsAuthenticated, Seller]
 
     def get(self, request):
         params = request.query_params
