@@ -32,7 +32,6 @@ class Auth(ObtainAuthToken):
         user = self.queryset.filter(
             username=serializer.validated_data["username"]
         ).first()
-        print(user.is_seller)
         if not user:
             return Response(
                 {"message": "Invalid password."},
@@ -329,3 +328,37 @@ class Statistics(APIView):
             return Response({"data": products}, status=status.HTTP_200_OK)
         else:
             return Response({"data": products[:amount]}, status=status.HTTP_200_OK)
+
+
+class SendReminder(APIView):
+    permission_classes = [IsAuthenticated, Seller]
+    queryset = Order.objects.all()
+
+    def get(self, request):
+        today = datetime.datetime.today()
+        payment_date = today + datetime.timedelta(days=1)
+        today = datetime.datetime.today().strftime("%Y-%m-%d")
+        payment_date = payment_date.strftime("%Y-%m-%d")
+        self.queryset = self.queryset.filter(payment_date=payment_date)
+        clients_ids = []
+        for query in self.queryset:
+            clients_ids.append(query.client)
+        next_queryset = get_user_model().objects.all().filter(id__in=clients_ids)
+        emails = []
+        for query in next_queryset:
+            emails.append(query.email)
+
+        send_mail(
+            "Order Payment Reminder",
+            "You have to pay for your order until tommorow!",
+            "example@example.com",
+            emails,
+        )
+
+        return Response(
+            {
+                "message": f"{len(emails)} reminders was sent.",
+                "emails_list": emails,
+            },
+            status=status.HTTP_200_OK,
+        )

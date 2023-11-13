@@ -12,4 +12,5 @@ urlpatterns = [
     path("auth/", name="authentication", view=Auth.as_view()),
     path("order/", name="order_operations", view=OrderOperations.as_view()),
     path("statistics/", name="statistics", view=Statistics.as_view()),
+    path("reminder/", name="reminder", view=SendReminder.as_view()),
 ]
