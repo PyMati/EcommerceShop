@@ -56,7 +56,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token acee32c9574eab553697cd126daf68ad791043ef",
+						"value": "Token b08c6e1d06734315392f649974644f42e782cdbb",
 						"type": "text"
 					}
 				],
@@ -180,7 +180,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"test2\",\r\n    \"password\": \"test2test2\"\r\n}",
+					"raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"test2test2\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -211,7 +211,13 @@
 			"name": "Add new product",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token b08c6e1d06734315392f649974644f42e782cdbb",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
@@ -238,7 +244,13 @@
 						{
 							"key": "image",
 							"type": "file",
-							"src": "/C:/Users/Młody/Desktop/zr1.png"
+							"src": "/C:/Users/Młody/Pictures/pdmatma.png"
+						},
+						{
+							"key": "",
+							"value": "Token b08c6e1d06734315392f649974644f42e782cdbb",
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
