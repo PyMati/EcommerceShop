@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import ProductCategory, Product, Order, Address
 from PIL import Image
-import os, datetime
+import os
 
 
 class ProductSerializer(serializers.ModelSerializer):

@@ -1,14 +1,11 @@
 import datetime
 from rest_framework.renderers import api_settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.settings import api_settings
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken, Token
-from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
