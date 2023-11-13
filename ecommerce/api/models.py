@@ -1,5 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser
+
+
+class UserProfile(AbstractUser):
+    is_customer = models.BooleanField(default=False)
+    is_seller = models.BooleanField(default=False)
 
 
 class ProductCategory(models.Model):
@@ -24,7 +29,7 @@ class Address(models.Model):
 
 
 class Order(models.Model):
-    client = models.ForeignKey(User, on_delete=models.CASCADE)
+    client = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     delivery_address = models.ForeignKey(Address, on_delete=models.CASCADE)
     ordered_products_summary = models.JSONField()
     order_date = models.DateField()

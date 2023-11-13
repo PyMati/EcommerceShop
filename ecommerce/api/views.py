@@ -1,6 +1,6 @@
 import datetime
 from rest_framework.renderers import api_settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import send_mail
 from rest_framework import status
@@ -18,6 +18,9 @@ from .permissions import Seller, Client
 
 
 # Endpoints section connected to authentication
+User = get_user_model()
+
+
 class Auth(ObtainAuthToken):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -29,6 +32,7 @@ class Auth(ObtainAuthToken):
         user = self.queryset.filter(
             username=serializer.validated_data["username"]
         ).first()
+        print(user.is_seller)
         if not user:
             return Response(
                 {"message": "Invalid password."},
@@ -67,6 +71,14 @@ class GetSpecificProduct(GenericAPIView):
 class ProductOperations(APIView):
     queryset = Product.objects.all()
     serializer = ProductSerializer
+
+    def get_permissions(self):
+        if (
+            self.request.method == "POST"
+            or self.request.method == "PUT"
+            or self.request.method == "DELETE"
+        ):
+            return [IsAuthenticated(), Seller()]
 
     def get(self, request, *args, **kwargs):
         params = request.query_params
@@ -110,17 +122,21 @@ class ProductOperations(APIView):
         )
 
     def post(self, request):
-        serializer = self.serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
+        def inner():
+            serializer = self.serializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(
+                    {"message": "New product was created."},
+                    status=status.HTTP_201_CREATED,
+                )
+
             return Response(
-                {"message": "New product was created."}, status=status.HTTP_201_CREATED
+                {"message": "An occurred error while creating product."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        return Response(
-            {"message": "An occurred error while creating product."},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
+        return inner()
 
     def put(self, request):
         product_id = request.data.get("id")
